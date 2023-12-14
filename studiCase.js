@@ -50,36 +50,32 @@ function withdraw(accountNumber, amount) {
   }
 }
 
-function validateCustomerData(name, accountNumber) {}
-
-function editCustomerInfo(accountNumber, newInfo) {}
-
-function name(params) {}
-
-function getHighBalanceCustomers() {
-  let maxAmount = 0;
-  for (let i = 0; i < customers.length; i++) {
-    if (i == 0) {
-      maxAmount = customers[i].amount;
-    } else {
-      if (customers[i].amount > maxAmount) {
-        maxAmount = customers[i].amount;
-      }
-    }
-    console.log(maxAmount);
-  }
-}
-
-function calculateTotalBalance() {}
-
-function performTransaction(accountNumber, amount) {}
-
 addCustomer("John Doe", "123456789");
 deposit("123456789", 1000);
 withdraw("123456789", 500);
 
-addCustomer("John Doe", "123456710");
-deposit("123456710", 2000);
-withdraw("123456710", 300);
+function validateCustomerData(name, accountNumber) {
+  if (customers.some((customer) => customer.accountNumber === accountNumber)) {
+    return false; // Account number is not unique
+  }
+  // Add more validation as needed
+  return true;
+}
 
-getHighBalanceCustomers();
+function editCustomerInfo(accountNumber, {}) {
+  let customer = findCustomerByAccountNumber(accountNumber);
+  if (customer) {
+    Object.assign(customer, newInfo);
+    return "Customer info updated";
+  } else {
+    return "Customer not found";
+  }
+}
+
+function getHighBalanceCustomers(minimumBalance) {
+  return customers.filter((customer) => customer.balance >= minimumBalance);
+}
+
+function calculateTotalBalance() {
+  return customers.reduce((total, customer) => total + customer.balance, 0);
+}
